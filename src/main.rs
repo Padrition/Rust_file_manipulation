@@ -1,4 +1,4 @@
-#![allow(unused_variables)]
+//! Simulating files one step at a time.
 
 extern crate rand;
 use rand::Rng;
@@ -8,7 +8,7 @@ use std::fmt::{Display};
 fn one_in(n: u32) -> bool{
     rand::thread_rng().gen_weighted_bool(n)
 }
-
+/// Represents a "file", which probably lives on a file system.
 #[derive(Debug, PartialEq)]
 enum FileState{
     Open,
@@ -38,6 +38,7 @@ impl Display for File{
 }
 
 impl File{
+    /// New files are assumed to be empty, but a name is requred.
     fn new(name: &str) -> File{
         File{
             name: String::from(name),
@@ -45,7 +46,7 @@ impl File{
             state: FileState::Closed,
         }
     }
-
+    /// New file wich is not empty
     fn new_with_data(name: &str, data: &Vec<u8>) ->File{
         let mut f = File::new(name);
         f.data = data.clone();
