@@ -2,6 +2,8 @@
 
 extern crate rand;
 use rand::Rng;
+use std::fmt;
+use std::fmt::{Display};
 
 fn one_in(n: u32) -> bool{
     rand::thread_rng().gen_weighted_bool(n)
@@ -18,6 +20,21 @@ struct File{
     name: String,
     data: Vec<u8>,
     state: FileState,
+}
+
+impl Display for FileState{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+        match *self{
+            FileState::Open => write!(f,"OPEN"),
+            FileState::Closed => write!(f,"CLOSED"),
+        }
+    }
+}
+
+impl Display for File{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+        write!(f,"<{}   ({})>", self.name, self.state)
+    }
 }
 
 impl File{
@@ -59,18 +76,19 @@ fn close (mut f: File) -> Result<File, String>{
 }
 
 fn main() {
-    let f5_data: Vec<u8> = vec![114, 117, 115, 116, 33];
-    let mut f5 = File::new_with_data("f5.txt", &f5_data);
+    let f6_data: Vec<u8> = vec![114, 117, 115, 116, 33];
+    let mut f6 = File::new_with_data("f6.txt", &f6_data);
 
     let mut buffer: Vec<u8> = vec![];
 
-    f5 = open(f5).unwrap();
-    let f5_length = f5.read(&mut buffer).unwrap();
-    f5 = close(f5).unwrap();
+    f6 = open(f6).unwrap();
+    let f6_length = f6.read(&mut buffer).unwrap();
+    f6 = close(f6).unwrap();
 
     let text = String::from_utf8_lossy(&buffer);
 
-    println!("{:?}", f5);
-    println!("{} is {} bytes long.", &f5.name, f5_length);
+    println!("{:?}", f6);
+    println!("{}", f6);
+    println!("{} is {} bytes long.", &f6.name, f6_length);
     println!("{}", text);
 }
